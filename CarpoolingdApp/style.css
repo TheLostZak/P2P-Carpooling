@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.cont{
+    padding: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-image: url('assets/vroom-vroom.jpeg');
+    margin: 0;
+    
+}
+
+.loginnav{
+    background-color: #333;
+    color: #fff;
+    padding: 1px 20px;
+}
+
+body.loginpanel {
+    background-image: url('assets/pass.png');
+    background-size: cover; /* Adjusts the background image size to cover the entire body */
+}
+
+.navbar {
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+}
+
+
+.card {
+    width: 50%;
+    margin: 0 auto; 
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    padding: 15px;
+    color: #fff;
+    background-color: rgba(0,0,0,0.6);
+}
+
+
+.title {
+    width: 200px;
+    display: inline-block;
+}
+
+.textbox{
+    padding: 10px;
+}
+
+.highlight {
+    color: red !important;
+    background-color: lightyellow !important;
+}
+
+
+.btn,
+.btn_logout {
+    background-color: antiquewhite;
+    border: black solid 1px;
+    width: 150px;
+    display: inline-block;
+    margin-left: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.btn_logout {
+    background-color: black !important;
+    color: white;
+}
+
+
+.navcard{
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.undernav{
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    text-align: center;
+    padding: 10px;
+}
+
+body.backimage{
+    background-image: url("assets/DriverPanel.jpeg")
+}
+
+body.backimage {
+    background-image: url("assets/DriverPanel.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Optionally, you can set a background color in case the image doesn't cover the entire body */
+    background-color: #f2f2f2; /* Example background color */
+}
+
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center; /* Align text in the center */
+}
+
+.navcard {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 5px; /* Add rounded corners to the card */
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    margin: 20px; /* Add margin around the card */
+}
+
+.navcard h3 {
+    margin-bottom: 10px; /* Add space below the heading */
+}
+
+.btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn_logout {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+  }
+
+
+  body.backpassenger{
+    background-image: url('assets/passenger.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-position: 80%;
+    background-color: #f2f2f2; /* Example background color */
+  }

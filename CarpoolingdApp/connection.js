@@ -1,0 +1,1040 @@
+// Import ethers.js library
+// Import ethers.js library
+
+
+
+const App = {
+    loading: false,
+    contracts: {},
+
+    load: async () => {
+        await App.loadWeb3();
+        await App.loadContract();
+        await App.render();
+    },
+
+    loadWeb3: async () => {
+      if (window.web3) {
+        App.provider = new ethers.providers.Web3Provider(window.ethereum)
+
+// MetaMask requires requesting permission to connect users accounts
+await App.provider.send("eth_requestAccounts", []);
+
+// The MetaMask plugin also allows signing transactions to
+// send ether and pay to change state within the blockchain.
+// For this, you need the account signer...
+App.account = App.provider.getSigner()
+alert(`Hi ${App.account} `)
+        
+    } else {
+            window.alert("Please connect to Metamask.");
+        }
+    },
+
+    
+
+    loadContract: async () => {
+        // Replace 'YourContractABI' with the ABI of your CrowdFunding smart contract
+        const contractABI = [
+            {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hashcodeaddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "headingfrom",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "headingto",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ridingdate",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ridingtime",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "rideamount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "nop",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "vtype",
+                        "type": "string"
+                    }
+                ],
+                "name": "AddRide",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rideno",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "passenger",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "nop",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ridechagres",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "MapRideBooking",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hashaddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "username",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "phonenumber",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "email",
+                        "type": "string"
+                    }
+                ],
+                "name": "RegisterUserAccount",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rideno",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "nop",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "RideNOPStatus",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "argRideKey",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "activateRide",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "argRideKey",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "cancelRide",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "dhashcode",
+                        "type": "address"
+                    }
+                ],
+                "name": "getDriverBookedRides",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint256",
+                                "name": "rideKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "hashcodeaddress",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingfrom",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingto",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingdate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingtime",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nopstatus",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "vtype",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideBookingDone",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideOver",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "rideStatus",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideBookingKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "bookedbypassenger",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "travelnop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "paidamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "bookingstatus",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "paymentstatus",
+                                "type": "bool"
+                            }
+                        ],
+                        "internalType": "struct PublishRideBookingList[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getMyRides",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint256",
+                                "name": "rideKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "hashcodeaddress",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingfrom",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingto",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingdate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingtime",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nopstatus",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "vtype",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideBookingDone",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideOver",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "rideStatus",
+                                "type": "bool"
+                            }
+                        ],
+                        "internalType": "struct PublishRide[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "phashcode",
+                        "type": "address"
+                    }
+                ],
+                "name": "getPassengerBookedRides",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint256",
+                                "name": "rideKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "hashcodeaddress",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingfrom",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingto",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingdate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingtime",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nopstatus",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "vtype",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideBookingDone",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideOver",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "rideStatus",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideBookingKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "bookedbypassenger",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "travelnop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "paidamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "bookingstatus",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "paymentstatus",
+                                "type": "bool"
+                            }
+                        ],
+                        "internalType": "struct PublishRideBookingList[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hashcode",
+                        "type": "address"
+                    }
+                ],
+                "name": "getPassengerRides",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint256",
+                                "name": "rideKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "hashcodeaddress",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingfrom",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingto",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingdate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingtime",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nopstatus",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "vtype",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideBookingDone",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideOver",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "rideStatus",
+                                "type": "bool"
+                            }
+                        ],
+                        "internalType": "struct PublishRide[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getRideCount",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hashcode",
+                        "type": "address"
+                    }
+                ],
+                "name": "getUserDetails",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "hashcode",
+                        "type": "address"
+                    }
+                ],
+                "name": "loginPanel",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rbid",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "action",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "rideBookingStatusUpdate",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "rbid",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ridepaymentupdates",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "phashcode",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "headingfrom",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "headingto",
+                        "type": "string"
+                    }
+                ],
+                "name": "searchByLocation",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint256",
+                                "name": "rideKey",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "hashcodeaddress",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingfrom",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "headingto",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingdate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "ridingtime",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "rideamount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nop",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "nopstatus",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "vtype",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideBookingDone",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "isRideOver",
+                                "type": "bool"
+                            },
+                            {
+                                "internalType": "bool",
+                                "name": "rideStatus",
+                                "type": "bool"
+                            }
+                        ],
+                        "internalType": "struct PublishRide[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "argRideKey",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "searchView",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+        // Replace 'YourContractAddress' with the address of your deployed CrowdFunding smart contract
+        const contractAddress = '0xA5D930dF3aF31754dC102582cd1D3E8C16F3Ba6f';
+        
+        // Create a JavaScript version of the smart contract
+        App.myContract = new ethers.Contract(contractAddress, contractABI,App.provider);
+    },
+
+    render: async () => {
+        // Prevent double render
+        if (App.loading) {
+            return;
+        }
+
+        // Update app loading state
+        App.setLoading(true);
+
+        // Render Account
+        $('#account').html(App.account);
+
+        // Render Campaigns
+        // await App.renderCampaigns();
+
+        // Update loading state
+        App.setLoading(false);
+    },
+
+    renderCampaigns: async () => {
+        try {
+            const campaigns = await App.myContract.connect(App.account).getCampaigns();
+            const campaignsDiv = $('#campaigns');
+
+            // Clear previous campaigns (if any)
+            campaignsDiv.empty();
+var count=0;
+window.App=App;
+            campaigns.forEach(campaign => {
+
+                const campaignDiv = $('<div>');
+                campaignDiv.html(`
+                    <h3>${campaign.title}</h3>
+                    <p>Description: ${campaign.description}</p>
+                    <p>Target Amount: ${campaign.target}</p>
+                    <p>Deadline: ${new Date(campaign.deadline * 1000).toLocaleString()}</p>
+                    <p>Amount Collected: ${campaign.amountCollected}</p>
+                    <p>Image: <img src=${campaign.image} alt="${campaign.title}" style="max-width: 200px;"></p>
+                    <button onclick="App.donateToCampaign(${count})">Donate</button>
+                    <button onclick="App.getDonors(${count})">Donators</button>
+                    <hr>
+                `);
+                campaignsDiv.append(campaignDiv);
+                count++
+            });
+        } catch (error) {
+            console.error('Error fetching campaigns:', error);
+        }
+    },  
+// getMyRides:async() => {
+//     try {
+//         const {myContract}=App
+//         console.log(App)
+//         var rid = Cookies.get('hashcodecp')
+//         const result = await myContract.getMyRides()
+//         console.log("result")
+//         const ridecount = result[1]
+//     }catch(error){console.log(error)}
+// },
+//     // loginPanel: async () => {
+//         try {
+//             var id = "0x889fA7396Cbafb8dDF3082DB2ff5C4D36F16b2A5"; // Ethereum address in hexadecimal format
+//             // Call the smart contract function to login
+//             const result = await App.myContract.connect(App.account).loginPanel(id);
+//             // Retrieve the result from the function call
+//             const username = result[0];
+//             const status = result[1];
+            
+//             console.log('Username:', username);
+//             console.log('Status:', status);
+            
+//             if (status === 1) {
+//                 console.log('Login successful!');
+//                 Cookies.set('hashcodecp',id,{expires : 14});
+//                 Cookies.set('usernamecp',username,{expires : 14});
+//                 window.location.replace('dashboard.html');
+                
+//                 // You can update the UI or perform further actions here
+//             } else {
+//                 console.log('User not found!');
+//                 // Handle the case when the user is not found
+//             }
+//         } catch (error) {
+//             console.error('Error logging in:', error);
+//             // Handle the error and display an error message to the user
+//         }
+//     }
+// ,    
+    getDonors:async(id)=>{
+      try {
+        const campaignsDiv = $('#campaigns');
+        const result = await App.App.myContract.getDonators(id);
+
+        // Extract the data from the result
+        const donators = result[0];
+        const donations = result[1];
+
+        // Convert the data to a more usable format (optional)
+        const donatorData = donators.map((donator, index) => ({
+            address: donator,
+            donationAmount: donations[index].toString() // Convert BigNumber to string
+        }));
+        campaignsDiv.append('<h1>Donators List<h1>')
+        donatorData.forEach(donator => {
+
+          const donateDiv = $('<div>');
+          
+          donateDiv.html(`
+          
+              <h3>${donator.address}</h3>
+              <p>Description: ${donator.donationAmount}</p>
+              <hr>
+          `);
+
+          campaignsDiv.append(donateDiv);
+
+
+
+
+      });
+        
+      } catch (error) {
+        console.error('Error find donations:', error);
+      }
+    }
+,
+    setLoading: (boolean) => {
+        App.loading = boolean;
+        const loader = $('#loader');
+        const content = $('#content');
+        if (boolean) {
+            loader.show();
+            content.hide();
+        } else {
+            loader.hide();
+            content.show();
+        }
+    }
+};
+
+$(() => {
+    $(window).load(() => {
+        App.load();
+    });
+});

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Pooling Contract</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Car Pooling Contract</h1>
+
+    <div id="userDetails"></div>
+    <div id="myRides"></div>
+    <div id="passengerRides"></div>
+
+    <script>
+        // Contract address and ABI
+        const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+        const contractABI = [
+            // Copy the ABI here
+        ];
+
+        // Connect to the Ethereum network
+        const provider = new ethers.providers.JsonRpcProvider('YOUR_JSON_RPC_PROVIDER');
+        const contract = new ethers.Contract(contractAddress, contractABI, provider);
+
+        // Example function calls
+        async function getUserDetails() {
+            const userAddress = 'USER_ADDRESS';
+            const userDetails = await contract.getUserDetails(userAddress);
+            $('#userDetails').html(`<p>Username: ${userDetails[0]}</p><p>Phone Number: ${userDetails[1]}</p><p>Email: ${userDetails[2]}</p>`);
+        }
+
+        async function getMyRides() {
+            const [rides, count] = await contract.getMyRides();
+            $('#myRides').html(`<h2>My Rides (${count})</h2>`);
+            rides.forEach(ride => {
+                $('#myRides').append(`<p>Ride ID: ${ride.rideKey}</p><p>From: ${ride.headingfrom}</p><p>To: ${ride.headingto}</p><hr>`);
+            });
+        }
+
+        async function getPassengerRides() {
+            const userAddress = 'USER_ADDRESS';
+            const [rides, count] = await contract.getPassengerRides(userAddress);
+            $('#passengerRides').html(`<h2>Passenger Rides (${count})</h2>`);
+            rides.forEach(ride => {
+                $('#passengerRides').append(`<p>Ride ID: ${ride.rideKey}</p><p>From: ${ride.headingfrom}</p><p>To: ${ride.headingto}</p><hr>`);
+            });
+        }
+
+        async function getUserDetails() {
+            const userAddress = 'USER_ADDRESS';
+            const userDetails = await contract.getUserDetails(userAddress);
+            $('#userDetails').html(`<h2>User Details</h2><p>Username: ${userDetails[0]}</p><p>Phone Number: ${userDetails[1]}</p><p>Email: ${userDetails[2]}</p>`);
+        }
+        
+        async function getMyRides() {
+            const [rides, count] = await contract.getMyRides();
+            $('#myRides').html(`<h2>My Rides (${count})</h2>`);
+            if (rides.length > 0) {
+                rides.forEach(ride => {
+                    $('#myRides').append(`<p>Ride ID: ${ride.rideKey}</p><p>From: ${ride.headingfrom}</p><p>To: ${ride.headingto}</p><hr>`);
+                });
+            } else {
+                $('#myRides').append('<p>No rides found.</p>');
+            }
+        }
+
+        async function getPassengerRides() {
+            const userAddress = 'USER_ADDRESS';
+            const [rides, count] = await contract.getPassengerRides(userAddress);
+            $('#passengerRides').html(`<h2>Rides Booked as Passenger (${count})</h2>`);
+            if (rides.length > 0) {
+                rides.forEach(ride => {
+                    $('#passengerRides').append(`<p>Ride ID: ${ride.rideKey}</p><p>From: ${ride.headingfrom}</p><p>To: ${ride.headingto}</p><hr>`);
+                });
+            } else {
+                $('#passengerRides').append('<p>No rides booked as passenger.</p>');
+            }
+        }
+
+
+        // Call the functions
+        // getUserDetails();
+        // getMyRides();
+        // getPassengerRides();
+    </script>
+</body>
+</html>
